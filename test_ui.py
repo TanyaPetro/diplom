@@ -34,7 +34,7 @@ def test_search_by_name():
         main_page.open()
 
     with allure.step("Ввод навзвания в строку поиска"):
-        main_page.search_by_name()
+        main_page.search_by_name('Гарри Поттер и философский камень')
 
     with allure.step("Проверка названия найденного фильма"):
         assert main_page.get_film_name() == 'Гарри Поттер \
@@ -57,7 +57,7 @@ def test_full_search():
     with allure.step(
         "Переход на вкладку расширенного поиска и ввод параметров поиска"
     ):
-        main_page.full_search()
+        main_page.full_search('Гарри Поттер', '2004')
 
     with allure.step("Проверка названия найденного фильма"):
         assert main_page.get_film_name() == 'Гарри Поттер \
@@ -80,7 +80,7 @@ def test_random_search():
     with allure.step(
         "Переход на вкладку случайного поиска и ввод параметров поиска"
     ):
-        main_page.random_search()
+        main_page.random_search('аниме', 'Япония')
 
     with allure.step("Проверка параметров найденного фильма"):
         assert main_page.get_film_genre() == 'аниме'

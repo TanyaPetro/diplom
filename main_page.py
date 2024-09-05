@@ -6,7 +6,8 @@ import json
 
 
 class MainPage:
-    url = 'https://www.kinopoisk.ru/'
+    with open('url.json', 'r') as url_file:
+        url = json.load(url_file)["url"]
 
     def __init__(self, driver: object):
         self.driver = driver
@@ -69,13 +70,13 @@ class MainPage:
 div[3]/nav/div[2]/div/a/div/p[1]").get_attribute("textContent")
 
     @allure.step("Поиск по названию")
-    def search_by_name(self):
+    def search_by_name(self, film_name: str):
         show = WebDriverWait(self.driver, 10)
 
         show.until(
             EC.element_to_be_clickable((
                 By.XPATH, "//input[contains(@name, 'kp_query')]"))
-            ).send_keys('Гарри Поттер и философский камень')
+            ).send_keys(film_name)
 
         self.driver.find_element(
             By.XPATH, "//button[contains(@aria-label, 'Найти')]"
@@ -88,7 +89,7 @@ div[3]/nav/div[2]/div/a/div/p[1]").get_attribute("textContent")
             "//*[@itemprop='name']/span").get_attribute("textContent")
 
     @allure.step("Расширенный поиск")
-    def full_search(self):
+    def full_search(self, film_name: str, year: str):
         show = WebDriverWait(self.driver, 10)
 
         show.until(
@@ -99,18 +100,18 @@ div[3]/nav/div[2]/div/a/div/p[1]").get_attribute("textContent")
         show.until(
             EC.element_to_be_clickable((
                 By.XPATH, "//input[contains(@id, 'find_film')]"))
-            ).send_keys('Гарри Поттер')
+            ).send_keys(film_name)
 
         self.driver.find_element(
             By.XPATH, "//input[contains(@id, 'year')]"
-            ).send_keys('2004')
+            ).send_keys(year)
 
         self.driver.find_element(
             By.XPATH, "//input[contains(@value, 'поиск')]"
             ).click()
 
     @allure.step("Поиск случайного фильма")
-    def random_search(self):
+    def random_search(self, genre: str, country: str):
         show = WebDriverWait(self.driver, 10)
 
         show.until(
@@ -125,7 +126,7 @@ div[3]/nav/div[2]/div/a/div/p[1]").get_attribute("textContent")
 
         show.until(
             EC.element_to_be_clickable((
-                By.XPATH, "//input[contains(@data-name, 'аниме')]"))
+                By.XPATH, f'//input[contains(@data-name, "{genre}")]'))
             ).click()
 
         self.driver.find_element(
@@ -134,7 +135,7 @@ div[3]/nav/div[2]/div/a/div/p[1]").get_attribute("textContent")
 
         show.until(
             EC.element_to_be_clickable((
-                By.XPATH, "//input[contains(@data-name, 'Япония')]"))
+                By.XPATH, f'//input[contains(@data-name, "{country}")]'))
             ).click()
 
         show.until(
